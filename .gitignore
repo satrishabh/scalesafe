@@ -8,3 +8,6 @@ Thumbs.db
 desktop.ini
 .vscode/
 *.log
+
+# sync_from_live.py working copies
+.sync/
