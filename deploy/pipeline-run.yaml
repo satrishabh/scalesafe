@@ -19,7 +19,7 @@ spec:
       securityContext:
         fsGroup: 65532
   params:
-    - { name: repo-url, value: "https://github.com/satrishabh/scalesafe-site.git" }
+    - { name: repo-url, value: "https://github.com/satrishabh/scalesafe.git" }
     - { name: revision, value: main }
     - { name: app-name, value: scalesafe-site }
     - { name: image, value: "ghcr.io/satrishabh/scalesafe-site" }
