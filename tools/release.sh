@@ -29,7 +29,8 @@ say() { printf '\n== %s\n' "$*"; }
 
 # Azure CLI may not be on Git Bash's PATH.
 AZ=$(command -v az || true)
-[ -z "$AZ" ] && [ -x "/c/Program Files/Microsoft SDKs/Azure/CLI2/wbin/az.cmd" ] && AZ="/c/Program Files/Microsoft SDKs/Azure/CLI2/wbin/az.cmd"
+# (-f, not -x: Git Bash does not report .cmd files as executable)
+[ -z "$AZ" ] && [ -f "/c/Program Files/Microsoft SDKs/Azure/CLI2/wbin/az.cmd" ] && AZ="/c/Program Files/Microsoft SDKs/Azure/CLI2/wbin/az.cmd"
 [ -z "$AZ" ] && { echo "Azure CLI not found. Install it and run az login."; exit 1; }
 
 say "1. Source"
