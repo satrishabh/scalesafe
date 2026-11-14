@@ -22,19 +22,18 @@ curl -sI http://127.0.0.1:18080/
 - With Cloudflare proxying (orange cloud) in front of AIO, set SSL mode to Full (strict) and keep only one source of security headers. nginx sends them now; remove any duplicate Cloudflare Transform Rules.
 - Check the preview first: all pages, the contact form, and `curl -sI` headers.
 
-## Current deployment (2026-11-14)
+## Preview deployment
 
 | Item | Value |
 |---|---|
-| Preview URL | https://scalesafe-site-dev.52.140.55.184.nip.io (Let's Encrypt, valid to 2027-02-12) |
+| Preview URL | https://scalesafe-site-dev.52.140.55.184.nip.io (Let's Encrypt, auto-renewed by cert-manager) |
+| Search engines | Kept out: `X-Robots-Tag: noindex, nofollow` and a disallow-all robots.txt on this host |
 | Cluster | Azure AKS `creative`, namespace `dev` |
-| Source commit | `032d66c70ad9` |
-| Build run | `ci/scalesafe-site-ci-zf9w6`: clone, test, build-push, scan all succeeded |
-| Scan | critical=0, high=0, medium=0, low=0 |
-| Image | `ghcr.io/satrishabh/scalesafe-site@sha256:707ed2ce5e58960f228ddad28fab6b6b082a37bd7278dedee0eb639adfcd853c` |
-| GitOps | `apps/scalesafe-site/values-dev.yaml` in `satrishabh/aio-gitops` (commit `9a80881`) |
-| Argo CD | `argocd/scalesafe-site-dev` (`deploy/argocd-dev.yaml`), manual sync; Synced / Healthy |
+| Running version | The digest in `apps/scalesafe-site/values-dev.yaml` in `satrishabh/aio-gitops`. Its header comment names the source commit, build run and scan result. |
+| Argo CD | `argocd/scalesafe-site-dev` (`deploy/argocd-dev.yaml`), manual sync |
 
-To release a new commit: run `deploy/pipeline-run.yaml` on the Azure cluster, set the new digest in the GitOps values file, push, then sync `scalesafe-site-dev` in Argo CD.
+Release: `tools/release.sh`. It builds the pushed `main` on Azure Tekton, refuses a scan with any HIGH/CRITICAL finding, pins the digest in GitOps, syncs Argo CD and runs `tools/verify.sh`.
 
-Rollback: set the previous digest in the GitOps values file and sync. To take the preview down, set `replicaCount: 0` there and sync.
+Rollback: put the previous digest back in the GitOps values file (`git log` there lists each release), push, and sync `scalesafe-site-dev`. To take the preview down, set `replicaCount: 0` there and sync.
+
+First deployed 2026-11-14 from `032d66c70ad9` (run `ci/scalesafe-site-ci-zf9w6`).
