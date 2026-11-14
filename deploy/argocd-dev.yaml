@@ -1,0 +1,30 @@
+# Argo CD Application for the scalesafe-site preview on Azure AKS 'creative'.
+# Mirrors sarvaikam-home-dev: manual sync, values from satrishabh/aio-gitops.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: scalesafe-site-dev
+  namespace: argocd
+  labels:
+    aio.platform/cluster: azure
+    aio.platform/project: scalesafe-site
+    env: dev
+spec:
+  project: apps
+  source:
+    repoURL: https://github.com/satrishabh/aio-gitops.git
+    targetRevision: main
+    path: helm/app
+    helm:
+      releaseName: scalesafe-site
+      valueFiles:
+        - values.yaml
+        - ../../apps/scalesafe-site/values-dev.yaml
+  destination:
+    name: azure
+    namespace: dev
+  syncPolicy:
+    syncOptions: [CreateNamespace=false]
+    retry:
+      limit: 3
+      backoff: { duration: 10s, factor: 2, maxDuration: 3m }
