@@ -1,0 +1,18 @@
+# ScaleSafe
+
+> ScaleSafe is compliance operations software for SEBI-regulated investment advisers (IA), research analysts (RA), portfolio management services (PMS) and alternative investment funds (AIF). It tracks obligations, owners, deadlines, evidence and inspection readiness, and publishes plain-language notes on SEBI and MeitY updates.
+
+Source content may be cited with a link back to the page. Training on this content is not permitted (see Terms of Use).
+
+## Key pages
+
+- [Home](https://scalesafe.co.in/): product overview, registration types and the enquiry form
+- [Accredit your investors in-house](https://scalesafe.co.in/accredited-investor-desk/): SEBI's manager-led accredited investor route
+- [Terms of Use](https://scalesafe.co.in/terms/)
+- [Privacy Notice](https://scalesafe.co.in/privacy-notice/)
+- [Cookie & Storage Notice](https://scalesafe.co.in/cookie-notice/)
+
+## Contact
+
+- hello@scalesafe.co.in
+- +91 7061710422

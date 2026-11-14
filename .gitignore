@@ -1,0 +1,10 @@
+# Local-only: raw crawl snapshot (incl. rendered views) and the editing copy.
+website-download/
+site-improved/
+
+# OS / editor
+Thumbs.db
+.DS_Store
+desktop.ini
+.vscode/
+*.log

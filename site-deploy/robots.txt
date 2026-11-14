@@ -1,0 +1,38 @@
+# robots.txt — scalesafe.co.in
+# Policy: search engines and AI answer engines may index and cite ScaleSafe pages (with a link back);
+# collection of our content to TRAIN AI models is not permitted (see Terms of Use, clause 4).
+# Content signals (Cloudflare Content Signals Policy): search = indexing & links; ai-input = live answers/grounding;
+# ai-train = model training. Expressly reserves rights under Article 4 of EU Directive 2019/790.
+
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Allow: /
+Disallow: /api/
+Disallow: /cdn-cgi/
+
+# Crawlers used only to collect AI training data
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+# AI search / answer crawlers that cite and link to sources are allowed by the "*" group above
+# (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Bingbot, Googlebot).
+
+Sitemap: https://scalesafe.co.in/sitemap.xml

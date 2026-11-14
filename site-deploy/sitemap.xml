@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- scalesafe.co.in sitemap. Lists ONLY URLs that return HTTP 200 and are canonical.
+     Regenerate with generate_sitemap.py whenever you publish or update a page, then upload to the site root. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://scalesafe.co.in/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://scalesafe.co.in/accredited-investor-desk/</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://scalesafe.co.in/privacy-notice/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://scalesafe.co.in/terms/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://scalesafe.co.in/cookie-notice/</loc><lastmod>2026-11-11</lastmod></url>
+</urlset>
