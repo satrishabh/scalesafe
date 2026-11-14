@@ -47,6 +47,23 @@ check /assets/fonts/ibm-plex-mono-400-latin.woff2 200 "public, max-age=2592000"
 check /_headers 404
 check /this-page-does-not-exist/ 404
 check /health 200
+check /insights/ 200 "public, max-age=0, must-revalidate"
+
+# /insights: the sitemap lists the section and its articles; one article page is well-formed.
+sm=$(curl -s -m 15 "$B/sitemap.xml")
+n=$(echo "$sm" | grep -o '<loc>https://scalesafe.co.in/insights/[^<]*</loc>' | wc -l | tr -d ' ')
+echo "$sm" | grep -q '<loc>https://scalesafe.co.in/insights/</loc>' && [ "$n" -gt 1 ] && echo "PASS sitemap lists /insights/ and $((n - 1)) article(s)" || { echo "FAIL sitemap /insights/ entries ($n)"; fail=1; }
+slug=$(echo "$sm" | grep -o '<loc>https://scalesafe.co.in/insights/[a-z0-9-][a-z0-9-]*/</loc>' | head -1 | sed -E 's#.*/insights/([^/]+)/.*#\1#')
+if [ -n "$slug" ]; then
+  check "/insights/$slug/" 200 "public, max-age=0, must-revalidate"
+  page=$(curl -s -m 15 "$B/insights/$slug/")
+  canon=$(echo "$page" | grep -o '<link rel="canonical" href="[^"]*"' | sed -E 's/.*href="([^"]*)"/\1/')
+  [ "$canon" = "https://scalesafe.co.in/insights/$slug/" ] && echo "PASS /insights/$slug/ canonical $canon" || { echo "FAIL /insights/$slug/ canonical [$canon]"; fail=1; }
+  h1=$(echo "$page" | grep -o '<h1[ >]' | wc -l | tr -d ' ')
+  [ "$h1" = 1 ] && echo "PASS /insights/$slug/ has exactly one <h1>" || { echo "FAIL /insights/$slug/ has $h1 <h1>"; fail=1; }
+else
+  echo "FAIL no article URL under /insights/ in the sitemap"; fail=1
+fi
 
 loc=$(curl -sI -m 15 "$B/terms" | tr -d '\r' | awk -F': ' 'tolower($1)=="location"{print $2}')
 case "$loc" in /terms/|"$B/terms/") echo "PASS /terms redirect stays on host ($loc)";; *) echo "FAIL /terms redirect: $loc"; fail=1;; esac
@@ -60,7 +77,10 @@ fi
 
 a=$(curl -s -m 20 "$B/" | md5sum | cut -c1-8)
 b=$(git -C "$REPO" show HEAD:site-deploy/index.html | md5sum | cut -c1-8)
-[ "$a" = "$b" ] && echo "PASS home page matches committed site-deploy/index.html ($a)" || { echo "FAIL home page $a != committed $b"; fail=1; }
+w=$(md5sum < "$REPO/site-deploy/index.html" | cut -c1-8)
+if [ "$a" = "$b" ]; then echo "PASS home page matches committed site-deploy/index.html ($a)"
+elif [ "$a" = "$w" ]; then echo "PASS home page matches working-tree site-deploy/index.html ($a; not committed yet)"
+else echo "FAIL home page $a != committed $b"; fail=1; fi
 
 tls=$(curl -s -o /dev/null -m 15 -w "%{ssl_verify_result}" "$B/")
 case "$B" in https://*) [ "$tls" = 0 ] && echo "PASS TLS certificate valid" || { echo "FAIL TLS verify result $tls"; fail=1; };; esac

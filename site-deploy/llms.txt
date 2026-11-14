@@ -7,6 +7,7 @@ Source content may be cited with a link back to the page. Training on this conte
 ## Key pages
 
 - [Home](https://scalesafe.co.in/): product overview, registration types and the enquiry form
+- [Insights](https://scalesafe.co.in/insights/): SEBI compliance briefings for IA, RA, PMS and AIF, one page per article
 - [Accredit your investors in-house](https://scalesafe.co.in/accredited-investor-desk/): SEBI's manager-led accredited investor route
 - [Terms of Use](https://scalesafe.co.in/terms/)
 - [Privacy Notice](https://scalesafe.co.in/privacy-notice/)

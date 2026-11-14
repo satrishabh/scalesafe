@@ -11,3 +11,6 @@ desktop.ini
 
 # sync_from_live.py working copies
 .sync/
+
+# Local review screenshots
+screenshots/

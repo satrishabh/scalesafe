@@ -7,6 +7,10 @@ Usage (from the repo root):
 Workflow: change the live site as usual -> run this -> review `git diff site-deploy` -> commit ->
 tools/release.sh to build on AIO and update the preview.
 
+After the fixes below, tools/insights.py regenerates /insights (one page per article on the home
+page, listing, sitemap entries, home-page links). If it cannot extract the articles, the sync stops
+with exit code 2 and site-deploy/ is left as it was.
+
 Standard library only. Polite crawl: honours robots.txt, same host only, rate-limited.
 """
 import argparse
@@ -22,6 +26,10 @@ import urllib.parse
 import urllib.request
 import urllib.robotparser
 from collections import deque
+
+sys.dont_write_bytecode = True  # no tools/__pycache__ in the repo
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import insights  # noqa: E402  (tools/insights.py: generates /insights from the home page articles)
 
 HOST = "scalesafe.co.in"
 BASE = f"https://{HOST}/"
@@ -281,6 +289,17 @@ def main():
         print("Problems (site-deploy/ NOT updated):")
         for e in errors:
             print(f"  ! {e}")
+        sys.exit(2)
+
+    # /insights is rebuilt from the freshly crawled and patched home page on every sync.
+    # Any extraction problem stops the sync here, before site-deploy/ is touched.
+    print("Insights:")
+    try:
+        for n in insights.generate(work):
+            print(f"  - {n}")
+    except insights.InsightsError as e:
+        print("Problems (site-deploy/ NOT updated):")
+        print(f"  ! insights: {e}")
         sys.exit(2)
 
     if args.dry_run:
