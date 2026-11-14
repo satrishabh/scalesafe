@@ -1,0 +1,15 @@
+{
+  "repoUrl": "https://github.com/satrishabh/scalesafe-site",
+  "name": "scalesafe-site",
+  "dockerfile": "Dockerfile",
+  "contextDir": ".",
+  "testImage": "",
+  "testCommand": "",
+  "registerWebhook": true,
+  "scanSeverity": "HIGH,CRITICAL",
+  "envVars": [],
+  "cpuRequest": "25m",
+  "cpuLimit": "250m",
+  "memoryRequest": "32Mi",
+  "memoryLimit": "128Mi"
+}

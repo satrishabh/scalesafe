@@ -1,0 +1,46 @@
+# Manual, build-only AIO run: clone, build, push, scan. deploy=false means no GitOps write.
+# Use AIO portal onboarding (deploy/aio-project.json) for webhooks and dev deployment.
+# kubectl create -f deploy/pipeline-run.yaml   (against the cluster that runs AIO's Tekton)
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: scalesafe-site-ci-
+  namespace: ci
+  labels:
+    aio.platform/project: scalesafe-site
+spec:
+  pipelineRef:
+    name: ci-pipeline
+  timeouts:
+    pipeline: 30m
+  taskRunTemplate:
+    serviceAccountName: pipeline-runner
+    podTemplate:
+      securityContext:
+        fsGroup: 65532
+  params:
+    - { name: repo-url, value: "https://github.com/satrishabh/scalesafe-site.git" }
+    - { name: revision, value: main }
+    - { name: app-name, value: scalesafe-site }
+    - { name: image, value: "ghcr.io/satrishabh/scalesafe-site" }
+    - { name: dockerfile, value: ./Dockerfile }
+    - { name: context, value: "." }
+    - { name: test-command, value: "" }
+    - { name: gitops-repo, value: "https://github.com/satrishabh/aio-gitops.git" }
+    - { name: gitops-values-file, value: apps/scalesafe-site/values-dev.yaml }
+    - { name: deploy, value: "false" }
+    - { name: scan-severity, value: "HIGH,CRITICAL" }
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          accessModes: [ReadWriteOnce]
+          resources:
+            requests:
+              storage: 1Gi
+    - name: dockerconfig
+      secret:
+        secretName: registry-credentials
+    - name: github-token
+      secret:
+        secretName: github-token

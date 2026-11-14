@@ -1,0 +1,5 @@
+# Only the site and the nginx config go into the image.
+*
+!site-deploy/
+!nginx/
+!Dockerfile

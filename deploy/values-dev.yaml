@@ -1,0 +1,44 @@
+# AIO dev values for scalesafe-site (static nginx on 8080).
+# Copy to apps/scalesafe-site/values-dev.yaml in satrishabh/aio-gitops when onboarding.
+# CI updates image.tag / replicaCount. Pattern follows apps/sarvaikam-home (Azure AKS, Traefik).
+nameOverride: scalesafe-site
+replicaCount: 0
+image:
+  repository: ghcr.io/satrishabh/scalesafe-site
+  tag: "0.0.0"
+imagePullSecrets:
+  - name: ghcr-pull
+containerPort: 8080
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 101
+  fsGroup: 101
+  seccompProfile:
+    type: RuntimeDefault
+resources:
+  requests: { cpu: 25m, memory: 32Mi }
+  limits: { cpu: 250m, memory: 128Mi }
+probes:
+  liveness:
+    path: /health
+    initialDelaySeconds: 5
+  readiness:
+    path: /health
+    initialDelaySeconds: 2
+ingress:
+  className: aio-azure
+  enabled: false
+  controller: traefik
+# No public route yet. scalesafe.co.in is served by Cloudflare today, and a certificate
+# for it can only be issued once its DNS points at the AIO ingress. Add the route at cutover:
+# routes:
+#   - host: scalesafe.co.in
+#     path: "/"
+#     tls: true
+#     issuer: letsencrypt-azure
+#     certOwner: true
+#     forceHttps: true
+#     wwwRedirect: true
+#     stripPrefix: false
+#     externalDns: false
+routes: []
