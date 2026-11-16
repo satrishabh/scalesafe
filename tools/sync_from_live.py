@@ -158,6 +158,19 @@ def write(path, text):
         f.write(text)
 
 
+# Applied in order: darken the muted grey first, then move the lighter grey onto the old muted value.
+CONTRAST = [("#68737B", "#5F6A72"), ("#8A949A", "#68737B")]
+
+
+def contrast_fix(text):
+    """Darken the home page's low-contrast greys (case-insensitive). Idempotent."""
+    total = 0
+    for old, new in CONTRAST:
+        text, n = re.subn(re.escape(old), new, text, flags=re.I)
+        total += n
+    return text, total
+
+
 def patch(root):
     """Re-apply our fixes. Each step is idempotent and reports what it did."""
     notes, errors = [], []
@@ -201,6 +214,10 @@ def patch(root):
         notes.append("home: CSS fixes added")
     else:
         errors.append("home: no </head> found; CSS fixes not applied")
+    # 2b. Home page: WCAG 2.1 AA text contrast. Muted grey #68737B is 4.24:1 on the mint and 4.49:1 on the
+    #     cream sections, and #8A949A is 3.09:1 on white; AA needs 4.5:1. /insights inherits this CSS.
+    h_new, n_contrast = contrast_fix(h_new)
+    notes.append(f"home: {n_contrast} low-contrast colour(s) darkened")
     h1_left = len(re.findall(r"<h1[ >]", h_new))
     if h1_left > 2:
         errors.append(f"home: {h1_left} <h1> tags remain (expected 2: hero + article view)")

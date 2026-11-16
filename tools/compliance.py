@@ -146,8 +146,26 @@ def add_to_sitemap(root):
     return [f"sitemap.xml: {added} compliance page(s) added"]
 
 
+def focusable_tables(root):
+    """Legal and briefing tables scroll sideways on phones (display:block; overflow-x:auto), so keyboard users
+    must be able to focus them (WCAG 2.1.1, axe scrollable-region-focusable)."""
+    changed = 0
+    for d, _, fs in os.walk(root):
+        for f in fs:
+            if not f.endswith(".html"):
+                continue
+            p = os.path.join(d, f)
+            t = _read(p)
+            t2, n = re.subn(r"<table>", '<table tabindex="0">', t)
+            if n:
+                _write(p, t2)
+                changed += n
+    return [f"{changed} table(s) made keyboard-focusable"]
+
+
 def apply(root):
     notes = build_pages(root)
+    notes += focusable_tables(root)
     notes += add_links_and_gpc(root)
     notes += copy_gpc(root)
     notes += add_to_sitemap(root)
