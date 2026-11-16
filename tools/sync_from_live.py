@@ -9,7 +9,9 @@ tools/release.sh to build on AIO and update the preview.
 
 After the fixes below, tools/insights.py regenerates /insights (one page per article on the home
 page, listing, sitemap entries, home-page links). If it cannot extract the articles, the sync stops
-with exit code 2 and site-deploy/ is left as it was.
+with exit code 2 and site-deploy/ is left as it was. Then tools/compliance.py adds the
+accessibility statement, the EU/UK/US privacy supplement, their footer links and the Global
+Privacy Control confirmation script.
 
 Standard library only. Polite crawl: honours robots.txt, same host only, rate-limited.
 """
@@ -30,6 +32,7 @@ from collections import deque
 sys.dont_write_bytecode = True  # no tools/__pycache__ in the repo
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import insights  # noqa: E402  (tools/insights.py: generates /insights from the home page articles)
+import compliance  # noqa: E402  (tools/compliance.py: accessibility statement, EU/UK/US privacy, GPC)
 
 HOST = "scalesafe.co.in"
 BASE = f"https://{HOST}/"
@@ -300,6 +303,17 @@ def main():
     except insights.InsightsError as e:
         print("Problems (site-deploy/ NOT updated):")
         print(f"  ! insights: {e}")
+        sys.exit(2)
+
+    # Accessibility statement, EU/UK/US privacy supplement, footer links and GPC confirmation,
+    # added after /insights so the generated briefings get them too.
+    print("Compliance:")
+    try:
+        for n in compliance.apply(work):
+            print(f"  - {n}")
+    except compliance.ComplianceError as e:
+        print("Problems (site-deploy/ NOT updated):")
+        print(f"  ! compliance: {e}")
         sys.exit(2)
 
     if args.dry_run:
