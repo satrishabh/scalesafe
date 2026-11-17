@@ -1,0 +1,49 @@
+# PREPARED, NOT APPLIED (2026-11-18). Production values for scalesafe-site on AIO (namespace app-prod,
+# Argo CD prod = manual sync). Follow deploy/PRODUCTION.md; copy to apps/scalesafe-site/values-prod.yaml in
+# satrishabh/aio-gitops only at cutover. Same chart keys as values-dev.yaml.
+nameOverride: scalesafe-site
+# Two replicas so a node drain or rollout never takes the public site down.
+replicaCount: 2
+image:
+  repository: ghcr.io/satrishabh/scalesafe-site
+  # Promote the exact image already verified on scalesafe.capital (apps/scalesafe-site/values-dev.yaml image.tag
+  # at the time of the go decision). Never build a new image for production.
+  tag: "SET-AT-PROMOTION"
+imagePullSecrets:
+  - name: ghcr-pull
+containerPort: 8080
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 101
+  fsGroup: 101
+  seccompProfile:
+    type: RuntimeDefault
+resources:
+  requests: { cpu: 25m, memory: 32Mi }
+  limits: { cpu: 250m, memory: 128Mi }
+probes:
+  liveness:
+    path: /health
+    initialDelaySeconds: 5
+  readiness:
+    path: /health
+    initialDelaySeconds: 2
+pdb:
+  enabled: true
+  minAvailable: 1
+ingress:
+  enabled: false # served by the AIO domain routes below (managed in the AIO Domains tab)
+  className: aio-azure
+  controller: traefik
+# Add these in the AIO portal Domains tab for the prod environment (it writes this block); listed here so the
+# intended state is reviewed with the rest. scalesafe.co.in is indexable automatically (nginx/default.conf).
+routes:
+  - host: scalesafe.co.in
+    path: "/"
+    tls: true
+    issuer: letsencrypt-azure
+    certOwner: true
+    forceHttps: true
+    wwwRedirect: true
+    stripPrefix: false
+    externalDns: false
