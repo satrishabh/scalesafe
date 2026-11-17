@@ -610,6 +610,13 @@ body{letter-spacing:0;word-spacing:.04em;font-feature-settings:normal;text-size-
 .footer-contact-line{font-size:13px}
 .fine{font-size:12px}
 
+/* 3b. Footer details (checked on scalesafe.capital 2026-11-17). */
+a[href^="tel:"]{word-spacing:.2em}  /* "+91 7061710422" read as one number in Plus Jakarta Sans */
+.footer-contact-line a[href^="tel:"]{word-spacing:0}  /* mono face: its space is already full width */
+.footer-contact-line{flex-direction:column;align-items:flex-start;gap:6px}
+.footer-contact-line>span{display:none}  /* the "·" separator dangled when the line wrapped */
+.footer .footer-legal{border-top:0!important;margin-top:0!important;padding-top:0!important}  /* doubled the .fine divider */
+
 /* 4. Buttons: one height and weight everywhere, comfortable to tap. */
 .btn{min-height:44px;font-size:14px;padding:12px 20px}
 
@@ -619,6 +626,12 @@ body{letter-spacing:0;word-spacing:.04em;font-feature-settings:normal;text-size-
   .hero-visual{max-width:none;min-height:0}
   /* Two-column splits squeezed the registration cards to ~170px on tablets: stack them. */
   .split{grid-template-columns:1fr;gap:40px}
+}
+
+/* Tablets: brand across the top, then the four link groups in one row (Contact was orphaned). */
+@media(min-width:561px) and (max-width:900px){
+  .footer-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:32px 20px}
+  .footer-grid>.footer-brand{grid-column:1/-1}
 }
 
 /* 6. Phones (≤560px): shorter page, bigger tap targets, two-column footer. */
