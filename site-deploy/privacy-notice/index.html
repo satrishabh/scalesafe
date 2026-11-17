@@ -26,8 +26,8 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 <link rel="manifest" href="/site.webmanifest">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Privacy Notice","url":"https://scalesafe.co.in/privacy-notice/","dateModified":"2026-11-11","publisher":{"@id":"https://scalesafe.co.in/#organization"}}</script>
-<link rel="preload" href="/assets/fonts/plus-jakarta-sans-400-800-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/fraunces-400-600-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/source-serif-4-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 :root{--green:#0F3D32;--green-2:#174F41;--sage:#A7C957;--ink:#14231F;--muted:#4A5E57;--line:#DDE4DF;--bg:#FFFFFF;--soft:#F5F7F4;--ok:#1C6B3A;--err:#A3271B;--info:#1F4E79;--radius:8px}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
@@ -80,17 +80,17 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin:4px 0}
 /* --- brand type on the legal pages (2026-11-17) ---
    These pages asked for "Inter", which the site never loads, so each device fell back to its own
    system font (Segoe UI on Windows, San Francisco on Apple, Roboto on Android) on a white page,
-   unlike the cream, Plus Jakarta Sans + Fraunces home page. Same fonts and colours as the home page. */
-@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400 800;font-display:swap;src:url('/assets/fonts/plus-jakarta-sans-400-800-latin.woff2') format('woff2')}
-@font-face{font-family:'Plus Jakarta Sans';font-style:italic;font-weight:400;font-display:swap;src:url('/assets/fonts/plus-jakarta-sans-italic-400-latin.woff2') format('woff2')}
-@font-face{font-family:'Fraunces';font-style:normal;font-weight:400 600;font-display:swap;src:url('/assets/fonts/fraunces-400-600-latin.woff2') format('woff2')}
+   unlike the cream home page. Same fonts (Inter, Source Serif 4) and colours as the home page. */
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url('/assets/fonts/inter-latin-var.woff2') format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400 600;font-display:swap;src:url('/assets/fonts/source-serif-4-latin-var.woff2') format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:italic;font-weight:400 600;font-display:swap;src:url('/assets/fonts/source-serif-4-italic-latin-var.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/assets/fonts/ibm-plex-mono-400-latin.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/assets/fonts/ibm-plex-mono-500-latin.woff2') format('woff2')}
 :root{--bg:#F8F6F1;--soft:#EDF1E8;--line:#CDD6CC;--muted:#4F5D63;--ink:#2F3A40;--radius:12px;
-  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --display:"Fraunces",Georgia,"Times New Roman",serif}
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --display:"Source Serif 4",Georgia,"Times New Roman",serif}
 html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{font-family:var(--font);font-size:16px;line-height:1.7;word-spacing:.04em;background:var(--bg);color:var(--ink)}
+body{font-family:var(--font);font-size:16px;line-height:1.7;letter-spacing:-.003em;background:var(--bg);color:var(--ink)}
 code,.mono{word-spacing:0}
 /* Header: same cream bar, dark wordmark and pill button as the home page. */
 header.site{background:rgba(248,246,241,.96);color:var(--green);border-bottom:1px solid #D9DEE3;position:sticky;top:0;z-index:20;backdrop-filter:blur(14px)}
@@ -105,7 +105,7 @@ nav.top a.cta{background:var(--green);color:#fff;border-radius:999px;padding:11p
 nav.top a.cta:hover{background:var(--green-2);color:#fff}
 /* Headings in the brand serif. */
 main{max-width:880px;padding:56px 20px 72px}
-h1,h2{font-family:var(--display);font-weight:500;font-variation-settings:"opsz" 144,"SOFT" 30;word-spacing:.08em}
+h1,h2{font-family:var(--display);font-weight:500;font-variation-settings:normal;font-optical-sizing:auto}
 h1{font-size:clamp(34px,5vw,52px);line-height:1.08;letter-spacing:-.02em}
 h2{font-size:clamp(24px,3vw,30px);line-height:1.2;letter-spacing:-.012em;border-top-color:var(--line)}
 h3{font-size:18px;font-weight:700;color:var(--green)}
@@ -139,6 +139,9 @@ footer .legal{font-size:13px;color:#B5C7BF}
   footer .col{min-width:0}
   footer .col:first-child{grid-column:1/-1}
 }
+/* 1.4.10 reflow at 320px: the button moves onto the links row. */
+@media (max-width:360px){nav.top a.cta{order:4;margin-left:0}header.site .bar::after{display:none}
+  footer .bar{grid-template-columns:1fr}footer a{overflow-wrap:anywhere}}
 </style>
 </head>
 <body>

@@ -24,6 +24,13 @@ Working copy only. The live site is unchanged.
   - **Tablets:** two-column sections stack below 900px (registration cards were squeezed to about 170px).
   - Brand fonts preloaded on the home and legal pages.
 
+- **Typefaces, Solutions, phone menu and WCAG 2.2 (2026-11-18).**
+  - **Fonts:** Source Serif 4 (headlines) + Inter (text), chosen from a four-way specimen; both SIL OFL and self-hosted in `assets/fonts/`. They replace Fraunces + Plus Jakarta Sans everywhere (home, /insights, /solutions, legal pages, investor desk). IBM Plex Mono stays for labels. Preloads updated.
+  - **Solutions** (`/solutions/`, built by `tools/solutions.py` after /insights): by registration (IA, RA, PMS, AIF, other) and by job (get registered, monthly compliance, inspection readiness, regulatory change, policies and cyber), each pairing platform capabilities with services. All copy restates the home page's Platform, Registrations and Services sections; the SEBI outsourcing disclaimer is kept. Added to the header, sitemap and llms.txt.
+  - **Phone menu:** the live header hid its section buttons at <=800px with no menu, so phones could not reach Platform/Registrations/Services/Resources. A `<details>` menu (keyboard, Escape to close; script `assets/site/menu-v1.js`).
+  - **WCAG 2.2 AA:** skip link + main landmark on home and the desk (2.4.1), visible focus ring on every focusable element (2.4.7), scroll padding under the sticky header (2.4.11), no horizontal scroll at 320px on any page (1.4.10). axe (WCAG 2.0/2.1/2.2 A+AA) plus scripted keyboard/reflow checks: 27/27 page-width combinations clean.
+  - **Accessibility statement:** WCAG 2.2 wording, the audit-date placeholder replaced, fixed limitations removed, test method described. Still open: the acknowledgement/resolution days ([2]/[15]) need the owner's commitment.
+
 ## Not applied (need a decision or the source)
 - **Contact form destination:** the form posts to `formsubmit.co` with a Gmail address. Change to a company mailbox only once you confirm which address to use.
 - **404 page canonical:** the 404 template is not in the snapshot. Remove its canonical to `/404.html` in the source.

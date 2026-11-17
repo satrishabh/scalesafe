@@ -9,6 +9,11 @@
   <url><loc>https://scalesafe.co.in/cookie-notice/</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://scalesafe.co.in/accessibility/</loc><lastmod>2026-11-16</lastmod></url>
   <url><loc>https://scalesafe.co.in/privacy-notice/regional/</loc><lastmod>2026-11-16</lastmod></url>
+  <url>
+    <loc>https://scalesafe.co.in/solutions/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url><loc>https://scalesafe.co.in/insights/</loc><lastmod>2026-11-10</lastmod></url>
   <url><loc>https://scalesafe.co.in/insights/aml-cft-principal-officer-certification-consultation-nov-2026/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://scalesafe.co.in/insights/settlement-regulations-2026-in-force-nov-2026/</loc><lastmod>2026-11-06</lastmod></url>

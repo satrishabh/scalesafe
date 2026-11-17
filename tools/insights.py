@@ -537,8 +537,8 @@ def page(c, assets, *, title, description, canonical, og_type, image, image_alt,
 <meta name="theme-color" content="#0F3D32">
 <meta name="color-scheme" content="light">
 {c['icons']}
-<link rel="preload" href="/assets/fonts/fraunces-400-600-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/plus-jakarta-sans-400-800-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/source-serif-4-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{assets['css']}">
 <script type="application/ld+json">
 {ld}
@@ -810,7 +810,8 @@ def build(root, endpoint=DEFAULT_ENDPOINT):
         if rel.endswith(".html"):
             if len(re.findall(r"<h1[\s>]", text)) != 1:
                 raise InsightsError(f"{rel}: expected exactly one <h1>")
-            if re.search(r"<script(?![^>]*(?:application/ld\+json|src=\"/assets/insights/))", text):
+            # Only JSON-LD and first-party script files (ours: /assets/insights/, /assets/site/ for the phone menu).
+            if re.search(r"<script(?![^>]*(?:application/ld\+json|src=\"/assets/(?:insights|site)/))", text):
                 raise InsightsError(f"{rel}: unexpected inline script")
     home2, notes = patch_home(home, {a["slug"] for a in arts})
     out["index.html"] = home2

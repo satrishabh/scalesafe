@@ -33,6 +33,7 @@ sys.dont_write_bytecode = True  # no tools/__pycache__ in the repo
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import insights  # noqa: E402  (tools/insights.py: generates /insights from the home page articles)
 import compliance  # noqa: E402  (tools/compliance.py: accessibility statement, EU/UK/US privacy, GPC)
+import solutions  # noqa: E402  (tools/solutions.py: /solutions/ page)
 
 HOST = "scalesafe.co.in"
 BASE = f"https://{HOST}/"
@@ -50,9 +51,62 @@ DESIGN_CSS = "design-system.css"   # home page (and so /insights, which reuses i
 LEGAL_CSS = "legal-brand.css"      # pages on the plain legal template (privacy, terms, cookies, 404, ...)
 LEGAL_TEMPLATE_SIGN = '<header class="site">'
 FONT_PRELOADS = (
-    '<link rel="preload" href="/assets/fonts/plus-jakarta-sans-400-800-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
-    '<link rel="preload" href="/assets/fonts/fraunces-400-600-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
+    '<link rel="preload" href="/assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>\n'
+    '<link rel="preload" href="/assets/fonts/source-serif-4-latin-var.woff2" as="font" type="font/woff2" crossorigin>\n'
 )
+
+
+NAV_MARKER = "<!-- ss-nav: solutions + phone menu -->"
+SOLUTIONS_LINK = '<a class="nav-link nav-solutions" href="/solutions/">Solutions</a>'
+PHONE_MENU = NAV_MARKER + """
+      <details class="mobile-menu">
+        <summary aria-label="Menu"><span class="mm-bars" aria-hidden="true"></span><span class="mm-label">Menu</span></summary>
+        <nav class="mobile-menu-panel" aria-label="Site sections">
+          <a href="/solutions/">Solutions</a>
+          <a href="/#platform">Platform</a>
+          <a href="/#registrations">Registrations</a>
+          <a href="/#services">Services</a>
+          <a href="/insights/">Resources</a>
+          <a class="mm-cta" href="/#contact">Book a walkthrough</a>
+        </nav>
+      </details>
+      <script src="/assets/site/menu-v1.js" defer></script>"""
+
+
+def add_nav(text):
+    """Solutions link first in the header section links, and the phone menu after the header actions. Idempotent."""
+    if NAV_MARKER in text:
+        return text, "home: Solutions link and phone menu already present"
+    links = re.search(r'(<div class="links">\s*)', text)
+    actions = re.search(r'<div class="actions"><button class="btn primary nav-link" data-go="contact">Book a walkthrough</button></div>', text)
+    if not links or not actions:
+        return text, "home: header links/actions block not found; Solutions link and phone menu not added"
+    text = text[:actions.end()] + "\n      " + PHONE_MENU + text[actions.end():]
+    text = text[:links.end()] + SOLUTIONS_LINK + "\n        " + text[links.end():]
+    return text, "home: Solutions link and phone menu added"
+
+
+SKIP_LINK = '<a class="skip-link" href="#main">Skip to content</a>'
+
+
+def add_skip_link(text, page):
+    """WCAG 2.4.1: a skip link first in <body> and a <main id="main"> target (the desk had no <main>). Idempotent."""
+    if SKIP_LINK in text:
+        return text, f"{page}: skip link already present"
+    body = re.search(r"<body[^>]*>", text)
+    if not body:
+        return None, f"{page}: no <body>; skip link not added"
+    if re.search(r'<main[^>]*\bid="main"', text):
+        pass
+    elif re.search(r"<main>", text):
+        text = text.replace("<main>", '<main id="main" tabindex="-1">', 1)
+    elif '<article class="article">' in text and text.count("</article>") == 1:
+        text = text.replace('<article class="article">', '<main id="main" tabindex="-1">\n<article class="article">', 1)
+        text = text.replace("</article>", "</article>\n</main>", 1)
+    else:
+        return None, f"{page}: no <main> or single <article> to target; skip link not added"
+    body = re.search(r"<body[^>]*>", text)
+    return text[:body.end()] + "\n" + SKIP_LINK + text[body.end():], f"{page}: skip link and main landmark added"
 
 
 def inject_style(text, css_name):
@@ -64,7 +118,7 @@ def inject_style(text, css_name):
         return text, "already present"
     if "</head>" not in text:
         return None, "no </head> found"
-    if "plus-jakarta-sans-400-800-latin.woff2\" as=\"font\"" not in text:
+    if "inter-latin-var.woff2\" as=\"font\"" not in text:
         text = text.replace("<style", FONT_PRELOADS + "<style", 1) if "<style" in text else text.replace("</head>", FONT_PRELOADS + "</head>", 1)
     return text.replace("</head>", "<style>\n" + css + "</style>\n</head>", 1), "added"
 
@@ -247,6 +301,18 @@ def patch(root):
     else:
         h_new = h_out
         notes.append(f"home: {DESIGN_CSS} {note}")
+    # 2d. Home header: a Solutions link (/solutions/, built by tools/solutions.py) and a phone menu.
+    #     The live header hides its section buttons at <=800px and has no menu, so phones could only
+    #     reach Platform/Registrations/Services/Resources from the footer. /insights and /solutions
+    #     reuse this header, so they get both too.
+    h_new, note = add_nav(h_new)
+    (notes if "not found" not in note else errors).append(note)
+    h_out, note = add_skip_link(h_new, "home")
+    if h_out is None:
+        errors.append(note)
+    else:
+        h_new = h_out
+        notes.append(note)
     h1_left = len(re.findall(r"<h1[ >]", h_new))
     if h1_left > 2:
         errors.append(f"home: {h1_left} <h1> tags remain (expected 2: hero + article view)")
@@ -298,12 +364,23 @@ def patch(root):
             else:
                 continue
             t2, note = inject_style(t, css_name)
+            if t2 is not None and kind == "desk":
+                t3, skip_note = add_skip_link(t2, rel)
+                if t3 is None:
+                    errors.append(skip_note)
+                else:
+                    t2 = t3
             if t2 is None:
                 errors.append(f"{rel}: {css_name} not applied ({note})")
             elif t2 != t:
                 write(p, t2)
                 styled[kind] += 1
     notes.append(f"brand type added to {styled['legal']} legal page(s) and {styled['desk']} desk page(s)")
+
+    # 4c. Phone-menu script (external: /insights forbids inline scripts in the header it reuses).
+    os.makedirs(os.path.join(root, "assets", "site"), exist_ok=True)
+    shutil.copy2(os.path.join(PATCHES, "menu.js"), os.path.join(root, "assets", "site", "menu-v1.js"))
+    notes.append("assets/site/menu-v1.js: written")
 
     # 5. Files we add on top of the live site.
     for name in OVERLAY:
@@ -376,6 +453,16 @@ def main():
     except insights.InsightsError as e:
         print("Problems (site-deploy/ NOT updated):")
         print(f"  ! insights: {e}")
+        sys.exit(2)
+
+    # /solutions/ reuses the home header/footer and the /insights stylesheet, so it is built after /insights.
+    print("Solutions:")
+    try:
+        for n in solutions.generate(work):
+            print(f"  - {n}")
+    except insights.InsightsError as e:
+        print("Problems (site-deploy/ NOT updated):")
+        print(f"  ! solutions: {e}")
         sys.exit(2)
 
     # Accessibility statement, EU/UK/US privacy supplement, footer links and GPC confirmation,

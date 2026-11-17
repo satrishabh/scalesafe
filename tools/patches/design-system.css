@@ -2,22 +2,28 @@
    Client feedback: type looked cramped and inconsistent across devices, text too small on phones,
    phone layout too long. Applied last, after the live site's own styles. */
 
-/* 1. Word spacing. Plus Jakarta Sans and Fraunces both have a narrow space (0.17em; Arial is 0.28em).
-      With the negative tracking below, words ran together ("Makecompliance", "+917061710422").
-      Restore normal gaps and ease the tracking so headlines read as words, not a block. */
-body{letter-spacing:0;word-spacing:.04em;font-feature-settings:normal;text-size-adjust:100%;-webkit-text-size-adjust:100%}
+/* 1. Typefaces (2026-11-17, chosen from a four-way specimen): Source Serif 4 for headlines (an open
+      editorial serif in the spirit of Claude's) and Inter for text and UI (the most legible screen sans on
+      every OS). Both SIL OFL, self-hosted. They replace Fraunces + Plus Jakarta Sans, whose narrow word
+      space made words run together. IBM Plex Mono stays for labels. */
+@font-face{font-family:"Inter";font-style:normal;font-weight:400 700;font-display:swap;src:url("/assets/fonts/inter-latin-var.woff2") format("woff2")}
+@font-face{font-family:"Source Serif 4";font-style:normal;font-weight:400 600;font-display:swap;src:url("/assets/fonts/source-serif-4-latin-var.woff2") format("woff2")}
+@font-face{font-family:"Source Serif 4";font-style:italic;font-weight:400 600;font-display:swap;src:url("/assets/fonts/source-serif-4-italic-latin-var.woff2") format("woff2")}
+:root{--font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --display:"Source Serif 4",Georgia,"Times New Roman",serif}
+body{font-family:var(--font);letter-spacing:-.003em;word-spacing:normal;font-feature-settings:"cv11","ss03";
+  text-size-adjust:100%;-webkit-text-size-adjust:100%}
+/* Headlines: optical sizing on, Fraunces' opsz/SOFT axes off. */
 .hero-copy h1,.page-intro h1,.page-intro h2.h1-as-h2,.section h2,.featured-article h2,.feature h2,.way h3,
-.article-body h3,.legal h3,.stat-grid b,.ws-kpis b{word-spacing:.08em}
-.hero-copy h1{letter-spacing:-.028em;line-height:1.02}
-.page-intro h1,.page-intro h2.h1-as-h2{letter-spacing:-.022em}
-.section h2,.featured-article h2,.feature h2{letter-spacing:-.018em;line-height:1.12}
-.way h3,.article-body h3,.legal h3{letter-spacing:-.012em;line-height:1.18}
-.card h3,.service-row h3,.blog-card h3,.step b,.kpi b,.q-list h3,.reg-mini b{letter-spacing:-.008em}
-.logo,.brand-lockup{word-spacing:normal}
-/* Mono labels keep their own spacing; word-spacing would double up on a fixed-width face. */
-.eyebrow,.mono-label,.num,.article-meta,.blog-filter,.hero-status,.control-index,.ws-tag,.ws-head,.ws-due,
-.ws-foot,.footer h4,.footer-contact-line,.top,.home-contact-actions a,.entity-card>span,.reg-mini span,
-.status-pill,.field label{word-spacing:0}
+.article-body h3,.legal h3,.stat-grid b,.ws-kpis b,.insights-list-head h2,.article-body h2,.newsletter h2{
+  font-family:var(--display)!important;font-variation-settings:normal!important;font-optical-sizing:auto;word-spacing:normal}
+.hero-copy h1{font-weight:500;letter-spacing:-.018em;line-height:1.04}
+.hero-copy h1 em{font-style:italic;font-weight:400}
+.page-intro h1,.page-intro h2.h1-as-h2{font-weight:500;letter-spacing:-.015em}
+.section h2,.featured-article h2,.feature h2{font-weight:500;letter-spacing:-.012em;line-height:1.14}
+.way h3,.article-body h3,.legal h3{font-weight:500;letter-spacing:-.008em;line-height:1.2}
+.card h3,.service-row h3,.blog-card h3,.step b,.kpi b,.q-list h3,.reg-mini b{font-family:var(--font);font-weight:650;letter-spacing:-.011em}
+.btn,.text-link,.text-btn,.links{letter-spacing:-.005em}
 
 /* 2. Navigation in the text face, sentence case. Small uppercase mono read like code. */
 .links{font-family:var(--font);font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;color:#46535B;gap:28px}
@@ -58,8 +64,6 @@ body{letter-spacing:0;word-spacing:.04em;font-feature-settings:normal;text-size-
 .fine{font-size:12px}
 
 /* 3b. Footer details (checked on scalesafe.capital 2026-11-17). */
-a[href^="tel:"]{word-spacing:.2em}  /* "+91 7061710422" read as one number in Plus Jakarta Sans */
-.footer-contact-line a[href^="tel:"]{word-spacing:0}  /* mono face: its space is already full width */
 .footer-contact-line{flex-direction:column;align-items:flex-start;gap:6px}
 .footer-contact-line>span{display:none}  /* the "·" separator dangled when the line wrapped */
 .footer .footer-legal{border-top:0!important;margin-top:0!important;padding-top:0!important}  /* doubled the .fine divider */
@@ -84,7 +88,7 @@ a[href^="tel:"]{word-spacing:.2em}  /* "+91 7061710422" read as one number in Pl
 /* 6. Phones (≤560px): shorter page, bigger tap targets, two-column footer. */
 @media(max-width:560px){
   body{font-size:16px}
-  .top{font-size:10px;letter-spacing:0}
+  .top{font-size:9.5px;letter-spacing:0}
   .section{padding:56px 0}
   .brand-hero{padding:48px 0 56px}
   .hero-copy h1{font-size:clamp(38px,11vw,46px);letter-spacing:-.025em}
@@ -140,5 +144,48 @@ a[href^="tel:"]{word-spacing:.2em}  /* "+91 7061710422" read as one number in Pl
 }
 
 /* 7. Accredited investor desk: its nav and tag chips asked for system-ui (a different font per device). */
-.ss-nav,.ss-nav *,.ss-tags span{font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.ss-nav,.ss-nav *,.ss-tags span{font-family:var(--font)}
+body:has(.ss-nav) h1,body:has(.ss-nav) h2{font-family:var(--display);font-variation-settings:normal;font-optical-sizing:auto}
 .ss-nav a{text-decoration:underline;text-underline-offset:3px}  /* axe link-in-text-block: links told apart by colour only */
+
+/* 8. Header: Solutions link and the phone menu (markup added by sync_from_live.add_nav). */
+.links .nav-solutions{font:inherit;color:inherit;text-decoration:none}
+.links a.nav-link.current,.links a[aria-current="page"]{color:var(--brand-deep)}
+.mobile-menu{display:none;position:relative}
+.mobile-menu>summary{list-style:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;min-width:44px;padding:0 14px;
+  border:1px solid var(--line-strong,#CDD6CC);border-radius:999px;background:#fff;color:var(--brand-deep);font-weight:600;font-size:14px;cursor:pointer}
+.mobile-menu>summary::-webkit-details-marker{display:none}
+.mm-bars,.mm-bars::before,.mm-bars::after{display:block;width:16px;height:2px;border-radius:2px;background:currentColor;position:relative;content:""}
+.mm-bars::before{position:absolute;top:-5px}.mm-bars::after{position:absolute;top:5px}
+.mobile-menu[open] .mm-bars{background:transparent}
+.mobile-menu[open] .mm-bars::before{top:0;transform:rotate(45deg)}.mobile-menu[open] .mm-bars::after{top:0;transform:rotate(-45deg)}
+.mobile-menu-panel{position:absolute;right:0;top:calc(100% + 10px);z-index:40;width:min(300px,calc(100vw - 28px));display:grid;gap:2px;padding:10px;
+  background:#fff;border:1px solid var(--line-strong,#CDD6CC);border-radius:16px;box-shadow:0 18px 44px rgba(15,61,50,.16)}
+.mobile-menu-panel a{display:block;padding:12px 14px;border-radius:10px;color:var(--brand-deep);font-weight:600;font-size:16px;text-decoration:none}
+.mobile-menu-panel a:hover,.mobile-menu-panel a:focus-visible{background:var(--panel,#EDF1E8)}
+.mobile-menu-panel a[aria-current="page"]{background:var(--panel,#EDF1E8)}
+.mobile-menu-panel .mm-cta{margin-top:6px;text-align:center;background:var(--brand-deep);color:#fff;border-radius:999px}
+.mobile-menu-panel .mm-cta:hover,.mobile-menu-panel .mm-cta:focus-visible{background:#174F41}
+@media(max-width:800px){
+  .mobile-menu{display:block}
+  .nav .wrap{gap:10px}
+  .nav .actions{margin-left:auto}
+}
+@media(max-width:420px){
+  .mm-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .mobile-menu>summary{padding:0;justify-content:center;width:44px}
+  .nav .actions .btn{padding:10px 14px;font-size:13.5px}
+}
+
+/* 9. Accessibility, WCAG 2.2 AA (checked with axe + scripted keyboard/reflow tests, 2026-11-17).
+      2.4.1 bypass blocks: skip link (markup added by sync_from_live.add_skip_link). */
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:100;background:#fff;color:var(--brand-deep);padding:10px 14px;border-radius:8px;font-weight:700;text-decoration:underline}
+.skip-link:focus{left:12px}
+/* 2.4.7 / 2.4.13: one visible focus ring everywhere (some card links had none); sage on dark surfaces. */
+:where(a,button,summary,input,select,textarea,[tabindex]):focus-visible{outline:3px solid #566A1F!important;outline-offset:3px;border-radius:6px}
+:where(.footer,.top,.feature,.way-dark,.hero-visual,.featured-article,.stat-band,.sol-cta,.newsletter) :focus-visible{outline-color:#A7C957!important}
+/* 2.4.11 focus not obscured: anchors and focused fields stop below the sticky header. */
+html{scroll-padding-top:104px}
+main:focus{outline:none}
+/* 1.4.10 reflow at 320px: the header button is in the phone menu too, so drop it below 360px. */
+@media(max-width:360px){.nav .actions{display:none}.mobile-menu{margin-left:auto}}
