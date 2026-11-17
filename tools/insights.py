@@ -328,11 +328,11 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .breadcrumb li+li::before{content:"/";margin-right:6px;color:#9AA5A0}
 .breadcrumb a{color:var(--brand-deep);text-decoration:underline;text-underline-offset:2px}
 .insights-main .page-intro h1{overflow-wrap:break-word}
-.insights-main .page-intro .article-meta{display:flex;gap:10px 14px;color:#5F6A72;font-size:11px;margin-top:18px}
+.insights-main .page-intro .article-meta{display:flex;gap:10px 14px;color:#5F6A72;font-size:12.5px;margin-top:18px}
 .insights-toolbar{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-bottom:1px solid var(--brand-mist);padding-bottom:18px;margin-bottom:26px}
 .insights-toolbar .blog-filter[aria-pressed=true]{background:var(--brand-deep);border-color:var(--brand-deep);color:#fff}
 .insights-toolbar .blog-filter .n{margin-left:4px}  /* no opacity: 2.9:1 contrast at .7 */
-.insights-count{font-family:var(--mono);font-size:11px;color:#5F6A72;margin:0}
+.insights-count{font-family:var(--mono);font-size:12px;color:#5F6A72;margin:0}
 .insights-grid .blog-card{position:relative}
 .insights-grid .blog-card h3 a::after{content:"";position:absolute;inset:0;border-radius:inherit}
 .insights-grid .blog-card h3 a:hover{text-decoration:underline;text-underline-offset:3px}
@@ -357,7 +357,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .insight-related ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
 .insight-related li{margin:0;line-height:1.45}
 .insight-related a{font-weight:700;color:var(--brand-deep);text-decoration:underline;text-underline-offset:2px}
-.insight-related small{display:block;font-family:var(--mono);font-size:10.5px;color:#5F6A72;letter-spacing:.04em;margin-top:2px}
+.insight-related small{display:block;font-family:var(--mono);font-size:12px;color:#5F6A72;letter-spacing:.04em;margin-top:2px}
 .insight-back{margin:30px 0 0}
 .newsletter{margin:40px 0 0;padding:28px;border-radius:16px;background:var(--brand-deep);color:#E8EFEA}
 .newsletter h2{font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,28px);letter-spacing:-.02em;line-height:1.2;color:#fff;margin:0 0 8px}
@@ -368,7 +368,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .newsletter form[data-ss-form] button[type=submit]{width:auto;background:var(--brand-sage);color:var(--brand-deep);font-weight:700;flex:0 0 auto}
 .newsletter form[data-ss-form] button[type=submit]:hover{background:#B9D66E}
 .newsletter fieldset{border:0;padding:0;margin:16px 0 4px;min-width:0}
-.newsletter legend{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:#C9D8D1;margin-bottom:8px;padding:0}
+.newsletter legend{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#C9D8D1;margin-bottom:8px;padding:0}
 .newsletter .chips{display:flex;flex-wrap:wrap;gap:8px}
 .newsletter .chip{position:relative;display:inline-flex!important;margin:0!important;font-family:var(--mono)!important;font-weight:500!important}
 .newsletter .chip input{position:absolute;opacity:0;width:1px;height:1px}

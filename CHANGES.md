@@ -15,6 +15,15 @@ Working copy only. The live site is unchanged.
   - Hero "Book a 30-minute walkthrough" wrapped inside the pill on phones. Now one line, with "See how it works" below.
   - Blog card meta split the date and status pill across lines. Now items wrap whole.
 
+- **Design pass after client feedback (2026-11-17): same type and structure on every page and device.** CSS only, in `tools/patches/design-system.css` (home, so also /insights, and the investor desk) and `tools/patches/legal-brand.css` (privacy, regional supplement, cookies, accessibility, terms, 404). `sync_from_live.py` re-applies both on every sync. Checked at 360, 390, 820, 1366 and 1920px; axe WCAG 2.1 AA clean on all ten pages.
+  - **Words ran together.** Plus Jakarta Sans and Fraunces have a narrow space (0.17em; Arial's is 0.28em), and the site added up to −0.065em tracking on top: "Makecompliance", "+917061710422". Word spacing restored and headline tracking eased.
+  - **Legal pages looked like another website.** They asked for Inter, which is never loaded, so each device showed its own system font (Segoe UI, San Francisco, Roboto) on white. They now use the brand fonts, cream background, serif headings and the home page's pill button.
+  - **Text too small.** Status pills were 9px, labels and footer headings 10px. Nothing that carries meaning is under 10.5px now; body labels 12px and up.
+  - **Navigation** in the text face at 14px instead of 11px uppercase mono.
+  - **Phones:** steps as compact rows, brand card shorter, contact buttons full width, footer in two columns with 40px+ link rows, photo on the lead briefing only on the home page (all photos stay on /insights). Legal header: logo and button on one row.
+  - **Tablets:** two-column sections stack below 900px (registration cards were squeezed to about 170px).
+  - Brand fonts preloaded on the home and legal pages.
+
 ## Not applied (need a decision or the source)
 - **Contact form destination:** the form posts to `formsubmit.co` with a Gmail address. Change to a company mailbox only once you confirm which address to use.
 - **404 page canonical:** the 404 template is not in the snapshot. Remove its canonical to `/404.html` in the source.

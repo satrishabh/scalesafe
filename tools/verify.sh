@@ -2,7 +2,7 @@
 # Check a deployed copy of the site.
 # Usage: tools/verify.sh [base-url]   (default: the AIO preview)
 # Exit 0 when every check passes.
-B="${1:-https://scalesafe-site-dev.52.140.55.184.nip.io}"
+B="${1:-https://scalesafe.capital}"
 B="${B%/}"
 REPO=$(cd "$(dirname "$0")/.." && pwd)
 host=$(echo "$B" | sed -E 's#^https?://([^/:]+).*#\1#')

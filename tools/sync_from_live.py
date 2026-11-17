@@ -45,6 +45,28 @@ PATCHES = os.path.join(REPO, "tools", "patches")
 # Files we add that do not exist on the live site; carried over from site-deploy/ as-is.
 OVERLAY = ["llms.txt", "_headers"]
 CSS_MARKER = "/* --- audit fixes (2026-11-14) --- */"
+# Design pass (client feedback 2026-11-17): one type system on every device and every page.
+DESIGN_CSS = "design-system.css"   # home page (and so /insights, which reuses its CSS) + investor desk
+LEGAL_CSS = "legal-brand.css"      # pages on the plain legal template (privacy, terms, cookies, 404, ...)
+LEGAL_TEMPLATE_SIGN = '<header class="site">'
+FONT_PRELOADS = (
+    '<link rel="preload" href="/assets/fonts/plus-jakarta-sans-400-800-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
+    '<link rel="preload" href="/assets/fonts/fraunces-400-600-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
+)
+
+
+def inject_style(text, css_name):
+    """Add tools/patches/<css_name> as the last <style> in <head>, plus font preloads. Idempotent.
+    Returns (text, note) or (None, error)."""
+    css = read(os.path.join(PATCHES, css_name))
+    marker = css.splitlines()[0]
+    if marker in text:
+        return text, "already present"
+    if "</head>" not in text:
+        return None, "no </head> found"
+    if "plus-jakarta-sans-400-800-latin.woff2\" as=\"font\"" not in text:
+        text = text.replace("<style", FONT_PRELOADS + "<style", 1) if "<style" in text else text.replace("</head>", FONT_PRELOADS + "</head>", 1)
+    return text.replace("</head>", "<style>\n" + css + "</style>\n</head>", 1), "added"
 
 
 def fetch(url):
@@ -218,6 +240,13 @@ def patch(root):
     #     cream sections, and #8A949A is 3.09:1 on white; AA needs 4.5:1. /insights inherits this CSS.
     h_new, n_contrast = contrast_fix(h_new)
     notes.append(f"home: {n_contrast} low-contrast colour(s) darkened")
+    # 2c. Home page: design system pass, after every other style so it wins the cascade.
+    h_out, note = inject_style(h_new, DESIGN_CSS)
+    if h_out is None:
+        errors.append(f"home: {DESIGN_CSS} not applied ({note})")
+    else:
+        h_new = h_out
+        notes.append(f"home: {DESIGN_CSS} {note}")
     h1_left = len(re.findall(r"<h1[ >]", h_new))
     if h1_left > 2:
         errors.append(f"home: {h1_left} <h1> tags remain (expected 2: hero + article view)")
@@ -248,6 +277,33 @@ def patch(root):
         if t2 != t:
             write(p404, t2)
             notes.append("404.html: bogus canonical removed")
+
+    # 4b. Same type system on the other pages: brand fonts on the legal template (it asked for Inter,
+    #     which is never loaded, so every device showed its own system font), design pass on the desk.
+    #     Runs before compliance.py, which builds its pages from the (now patched) cookie-notice template.
+    styled = {"legal": 0, "desk": 0}
+    for d, _, fs in os.walk(root):
+        for f in fs:
+            if not f.endswith(".html"):
+                continue
+            p = os.path.join(d, f)
+            rel = os.path.relpath(p, root).replace(os.sep, "/")
+            if rel == "index.html":
+                continue
+            t = read(p)
+            if LEGAL_TEMPLATE_SIGN in t:
+                kind, css_name = "legal", LEGAL_CSS
+            elif rel == "accredited-investor-desk/index.html":
+                kind, css_name = "desk", DESIGN_CSS
+            else:
+                continue
+            t2, note = inject_style(t, css_name)
+            if t2 is None:
+                errors.append(f"{rel}: {css_name} not applied ({note})")
+            elif t2 != t:
+                write(p, t2)
+                styled[kind] += 1
+    notes.append(f"brand type added to {styled['legal']} legal page(s) and {styled['desk']} desk page(s)")
 
     # 5. Files we add on top of the live site.
     for name in OVERLAY:

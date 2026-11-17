@@ -21,7 +21,7 @@ RG=creative
 CLUSTER=creative
 GITOPS_REPO=https://github.com/satrishabh/aio-gitops.git
 VALUES=apps/$APP/values-dev.yaml
-PREVIEW=https://scalesafe-site-dev.52.140.55.184.nip.io
+PREVIEW=${PREVIEW:-https://scalesafe.capital}   # pre-corporate staging host (nip.io retired 2026-11-16)
 
 REPO=$(cd "$(dirname "$0")/.." && pwd)
 cd "$REPO"

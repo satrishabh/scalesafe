@@ -1,0 +1,131 @@
+/* --- design system fixes (2026-11-17) ---
+   Client feedback: type looked cramped and inconsistent across devices, text too small on phones,
+   phone layout too long. Applied last, after the live site's own styles. */
+
+/* 1. Word spacing. Plus Jakarta Sans and Fraunces both have a narrow space (0.17em; Arial is 0.28em).
+      With the negative tracking below, words ran together ("Makecompliance", "+917061710422").
+      Restore normal gaps and ease the tracking so headlines read as words, not a block. */
+body{letter-spacing:0;word-spacing:.04em;font-feature-settings:normal;text-size-adjust:100%;-webkit-text-size-adjust:100%}
+.hero-copy h1,.page-intro h1,.page-intro h2.h1-as-h2,.section h2,.featured-article h2,.feature h2,.way h3,
+.article-body h3,.legal h3,.stat-grid b,.ws-kpis b{word-spacing:.08em}
+.hero-copy h1{letter-spacing:-.028em;line-height:1.02}
+.page-intro h1,.page-intro h2.h1-as-h2{letter-spacing:-.022em}
+.section h2,.featured-article h2,.feature h2{letter-spacing:-.018em;line-height:1.12}
+.way h3,.article-body h3,.legal h3{letter-spacing:-.012em;line-height:1.18}
+.card h3,.service-row h3,.blog-card h3,.step b,.kpi b,.q-list h3,.reg-mini b{letter-spacing:-.008em}
+.logo,.brand-lockup{word-spacing:normal}
+/* Mono labels keep their own spacing; word-spacing would double up on a fixed-width face. */
+.eyebrow,.mono-label,.num,.article-meta,.blog-filter,.hero-status,.control-index,.ws-tag,.ws-head,.ws-due,
+.ws-foot,.footer h4,.footer-contact-line,.top,.home-contact-actions a,.entity-card>span,.reg-mini span,
+.status-pill,.field label{word-spacing:0}
+
+/* 2. Navigation in the text face, sentence case. Small uppercase mono read like code. */
+.links{font-family:var(--font);font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;color:#46535B;gap:28px}
+.links .nav-link{padding:8px 0}
+
+/* 3. Minimum readable sizes. Nothing that carries meaning below 11px; body labels 12px and up. */
+.top{font-size:11px}
+.eyebrow{font-size:12px;letter-spacing:.14em}
+.mono-label,.hero-status{font-size:11px;letter-spacing:.1em}
+.control-index{font-size:11px}
+.control-grid small{font-size:12.5px}
+.num{font-size:12px}
+.hero-note{font-size:13px}
+.home-contact-actions a{font-size:13px;padding:10px 14px}
+.home-contact-inner strong{font-size:15px}
+.reg-mini small{font-size:12.5px}
+.ws-head{font-size:10.5px}
+.ws-kpis span,.ws-ob small{font-size:12px}
+.ws-tag,.ws-foot{font-size:11px}
+.dash-row b{font-size:11px}
+.article-meta{font-size:11.5px}
+.status-pill{font-size:10.5px;padding:4px 9px}
+.badge{font-size:inherit}
+.blog-card p{font-size:14px}
+.blog-card .article-bottom{font-size:12.5px}
+.text-btn{font-size:14px}
+.blog-filter{font-size:13px;padding:9px 15px}
+.field label{font-size:12px}
+.form-note{font-size:12px!important}
+.consent{font-size:13px}
+.breadcrumb{font-size:13px}
+.ai-summary,#home>.ai-summary{font-size:14.5px;line-height:1.75}
+.chips em{font-size:12px}
+.footer h4{font-size:12px;letter-spacing:.12em}
+.footer-link,.footer a{font-size:14px}
+.footer-brand p{font-size:14px}
+.footer-contact-line{font-size:13px}
+.fine{font-size:12px}
+
+/* 4. Buttons: one height and weight everywhere, comfortable to tap. */
+.btn{min-height:44px;font-size:14px;padding:12px 20px}
+
+/* 5. Tablet (≤900px). */
+@media(max-width:900px){
+  .section{padding:68px 0}
+  .hero-visual{max-width:none;min-height:0}
+  /* Two-column splits squeezed the registration cards to ~170px on tablets: stack them. */
+  .split{grid-template-columns:1fr;gap:40px}
+}
+
+/* 6. Phones (≤560px): shorter page, bigger tap targets, two-column footer. */
+@media(max-width:560px){
+  body{font-size:16px}
+  .top{font-size:10px;letter-spacing:0}
+  .section{padding:56px 0}
+  .brand-hero{padding:48px 0 56px}
+  .hero-copy h1{font-size:clamp(38px,11vw,46px);letter-spacing:-.025em}
+  .hero-copy p,.page-intro p{font-size:17px}
+  .section h2{font-size:clamp(28px,8.4vw,34px)}
+  .page-intro{padding:52px 0 40px}
+  .page-intro h1,.page-intro h2.h1-as-h2{font-size:clamp(32px,9.4vw,38px)}
+  .hero-copy .actions{flex-direction:column;align-items:stretch}
+  .hero-copy .actions .btn{width:100%}
+  .hero-copy .actions .text-link,.hero-copy .actions a:not(.btn){align-self:flex-start;padding:10px 0}
+  /* Brand card: keep it, but not a full screen of decoration. */
+  .hero-visual{min-height:0;padding:20px}
+  .hero-mark-wrap{padding:22px 0 20px}
+  .hero-logo{width:200px}
+  /* Steps: one compact row each (icon left), instead of a full card per screen. */
+  .steps{gap:10px;margin-top:24px}
+  .step{display:grid;grid-template-columns:42px 1fr;column-gap:16px;align-items:start;padding:18px}
+  .step-ic{grid-row:1/span 3;margin:0}
+  .step .num{grid-column:2;margin:0}
+  .step b{grid-column:2;margin:2px 0 4px;font-size:18px}
+  .step p{grid-column:2}
+  /* Contact strip: label above, two equal buttons side by side. */
+  .home-contact-inner{gap:14px;padding:20px 0}
+  .home-contact-inner>div:first-child{flex-direction:column;align-items:flex-start;gap:6px}
+  .home-contact-actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .home-contact-actions a{text-align:center;padding:12px}
+  /* Stat band: tighter rows. */
+  .stat-grid>div{padding:14px 0}
+  .stat-grid b{font-size:38px}
+  .stat-grid span{font-size:14px}
+  /* Cards */
+  .card,.feature,.way{padding:22px}
+  .q-list>div{padding:16px}
+  .blog-card{padding:22px}
+  .blog-card .blog-card-thumb-pic{width:calc(100% + 44px);margin:-22px -22px 16px}
+  .blog-card .blog-card-thumb-pic img{width:100%;margin:0}
+  /* Home: photo on the lead briefing only, so the section stays scannable (all photos stay on /insights). */
+  .home-latest .blog-card:not(:first-child) .blog-card-thumb-pic{display:none}
+  .feature .mini{grid-template-columns:1fr 1fr}
+  .blog-card p{margin-bottom:10px}
+  /* Footer: brand full width, link groups in two columns, 44px rows to tap. */
+  .footer{padding:48px 0 24px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:28px 20px}
+  .footer-grid>.footer-brand{grid-column:1/-1}
+  .footer-link,.footer a.footer-link{display:block;padding:9px 0;margin:0;line-height:1.35}
+  .footer-contact-line a{display:inline-block;padding:8px 0}
+  .footer .footer-legal a{display:inline-block;padding:6px 0}
+  /* Text links and small buttons: at least 24px tall (WCAG 2.2 target size). */
+  .text-btn,.text-link,.breadcrumb a{display:inline-block;padding-top:6px;padding-bottom:6px}
+}
+@media(max-width:380px){
+  .footer-grid{grid-template-columns:1fr}
+}
+
+/* 7. Accredited investor desk: its nav and tag chips asked for system-ui (a different font per device). */
+.ss-nav,.ss-nav *,.ss-tags span{font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.ss-nav a{text-decoration:underline;text-underline-offset:3px}  /* axe link-in-text-block: links told apart by colour only */
