@@ -13,7 +13,7 @@ Production target: AIO namespace `app-prod`, Argo CD application for env `prod`,
 | # | Gate | Owner | How to check |
 |---|---|---|---|
 | 1 | The build to promote has been reviewed on scalesafe.capital (home, /solutions, /insights, legal pages) | Owner | Sign-off in writing |
-| 2 | Accessibility statement: acknowledge/resolve days filled in (today `[2]` / `[15]`) | Owner | `grep -c "\[2\]" site-deploy/accessibility/index.html` returns 0 |
+| 2 | Accessibility statement: acknowledge/resolve days filled in | Owner | Done 2026-11-18: 2 and 15 working days |
 | 3 | Newsletter form target exists, **or** the form is hidden. On scalesafe.co.in it posts to `https://api.scalesafe.co.in/clients/...`, which only exists once the platform runs in production (section 2) | Owner + platform | `curl -i https://api.scalesafe.co.in/clients/api/v1/public/subscriptions` answers (not DNS failure) |
 | 4 | Contact form destination decided (today formsubmit.co with a Gmail address; see CHANGES.md "Not applied") | Owner | Decision recorded |
 | 5 | `tools/sync_from_live.py` run on the day, so the live content is current, then committed | Engineer | Clean `git status` |
