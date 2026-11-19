@@ -4,6 +4,8 @@
 # The pod runs as uid 101 (runAsUser in the chart) with no volumes; nginx writes only to /tmp (nginx/nginx.conf).
 FROM alpine:3.24
 
+# Changes daily (set by AIO CI) so this layer is never served stale from the build cache.
+ARG AIO_PATCH_DATE
 RUN apk upgrade --no-cache \
  && apk add --no-cache nginx \
  && rm -rf /etc/nginx/http.d \
