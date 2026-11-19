@@ -75,9 +75,13 @@ else
   echo "$rb" | grep -q '^Allow: /$' && echo "PASS robots.txt is the site's own" || { echo "FAIL robots.txt is not the site's own"; fail=1; }
 fi
 
+# nginx rewrites the production API origin per host (nginx/default.conf, map $api_origin): apply the same
+# rewrite to the committed page before comparing, or every page with a form would differ on scalesafe.capital.
+case "$B" in *scalesafe.capital*) api="https://api.scalesafe.capital" ;; *) api="https://api.scalesafe.co.in" ;; esac
+rw() { sed "s#https://api.scalesafe.co.in#$api#g"; }
 a=$(curl -s -m 20 "$B/" | md5sum | cut -c1-8)
-b=$(git -C "$REPO" show HEAD:site-deploy/index.html | md5sum | cut -c1-8)
-w=$(md5sum < "$REPO/site-deploy/index.html" | cut -c1-8)
+b=$(git -C "$REPO" show HEAD:site-deploy/index.html | rw | md5sum | cut -c1-8)
+w=$(rw < "$REPO/site-deploy/index.html" | md5sum | cut -c1-8)
 if [ "$a" = "$b" ]; then echo "PASS home page matches committed site-deploy/index.html ($a)"
 elif [ "$a" = "$w" ]; then echo "PASS home page matches working-tree site-deploy/index.html ($a; not committed yet)"
 else echo "FAIL home page $a != committed $b"; fail=1; fi
