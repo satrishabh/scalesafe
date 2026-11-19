@@ -905,6 +905,14 @@ main:focus{outline:none}
 /* 1.4.10 reflow at 320px: the header button is in the phone menu too, so drop it below 360px. */
 @media(max-width:360px){.nav .actions{display:none}.mobile-menu{margin-left:auto}}
 </style>
+<style>
+/* --- footer layout (2026-11-19) --- */
+/* The legal footer ran each paragraph across the full page width (about 1,800px on a wide screen), so
+   "DPIIT-recognised startup (DIPP281270)" wrapped alone and the disclaimer broke mid-sentence. Keep the lines
+   to a readable measure (WCAG 1.4.8 advises at most 80 characters) and avoid one-word last lines where supported. */
+.footer .footer-legal p{text-wrap:pretty}
+.footer .footer-legal p + p{max-width:80ch}  /* company details and disclaimer; the link row stays one line where it fits */
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>

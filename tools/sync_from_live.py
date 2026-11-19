@@ -306,6 +306,13 @@ def patch(root):
     #     The live header hides its section buttons at <=800px and has no menu, so phones could only
     #     reach Platform/Registrations/Services/Resources from the footer. /insights and /solutions
     #     reuse this header, so they get both too.
+    # 2e. Legal footer: readable line length (tools/patches/footer-layout.css). /insights and /solutions reuse it.
+    h_out, note = inject_style(h_new, "footer-layout.css")
+    if h_out is None:
+        errors.append(f"home: footer-layout.css not applied ({note})")
+    else:
+        h_new = h_out
+        notes.append(f"home: footer-layout.css {note}")
     h_new, note = add_nav(h_new)
     (notes if "not found" not in note else errors).append(note)
     h_out, note = add_skip_link(h_new, "home")
