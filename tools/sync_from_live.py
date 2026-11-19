@@ -34,6 +34,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import insights  # noqa: E402  (tools/insights.py: generates /insights from the home page articles)
 import compliance  # noqa: E402  (tools/compliance.py: accessibility statement, EU/UK/US privacy, GPC)
 import solutions  # noqa: E402  (tools/solutions.py: /solutions/ page)
+import forms  # noqa: E402  (tools/forms.py: forms post to the ScaleSafe API on Azure; no Turnstile/formsubmit.co)
 
 HOST = "scalesafe.co.in"
 BASE = f"https://{HOST}/"
@@ -474,6 +475,16 @@ def main():
     except compliance.ComplianceError as e:
         print("Problems (site-deploy/ NOT updated):")
         print(f"  ! compliance: {e}")
+        sys.exit(2)
+
+    # Forms on Azure (tools/forms.py): no Turnstile/formsubmit.co, forms post to the ScaleSafe API, notices updated.
+    print("Forms:")
+    try:
+        for n in forms.apply(work):
+            print(f"  - {n}")
+    except forms.FormsError as e:
+        print("Problems (site-deploy/ NOT updated):")
+        print(f"  ! forms: {e}")
         sys.exit(2)
 
     if args.dry_run:

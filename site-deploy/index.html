@@ -685,7 +685,6 @@ form[data-ss-form] .warn{background:#FFF8E6;border:1px solid #E9D49A;border-radi
 }
 
 </style>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
 /* --- audit fixes (2026-11-14) --- */
 /* Section headings were h1 (11 per page). Now h2 with the same look as the original h1. */
@@ -1334,13 +1333,8 @@ main:focus{outline:none}
         </div>
       </div>
 
-      <form class="form" id="contactForm" action="https://formsubmit.co/compliance.scalesafe@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New ScaleSafe Website Enquiry">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="true">
-        <input type="hidden" name="source" value="ScaleSafe website enquiry">
-        <input type="hidden" name="_replyto" value="" id="replyToField">
-        <input type="text" name="_honey" style="display:none">
+      <form class="form" id="contactForm" data-endpoint="https://api.scalesafe.co.in/partners/api/v1/public/leads">
+        <div class="ss-hp" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden"><label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <div class="field"><label>Name</label><input id="cName" name="name" required placeholder="Your name"></div>
         <div class="field"><label>Work email</label><input id="cEmail" name="email" required type="email" placeholder="name@company.com"></div>
         <div class="field"><label>Registration</label><select id="cReg" name="registration" required><option value="">Select</option><option>Investment Adviser</option><option>Research Analyst</option><option>PMS</option><option>AIF</option><option>Other</option></select></div>
@@ -1356,26 +1350,14 @@ main:focus{outline:none}
           <span>I separately consent to receive optional marketing or product communications. This is not required to submit my enquiry.</span>
         </label>
 
-        <div class="field">
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAFNeZO2diK4tX_I-" data-theme="light"></div>
-        </div>
-
         <button class="btn primary" type="submit" style="width:100%">Submit enquiry</button>
         <p id="formMsg" class="muted" style="font-size:12px;margin:10px 0 0"></p>
-        <p class="form-note">Your enquiry will be emailed to <a href="mailto:hello@scalesafe.co.in">hello@scalesafe.co.in</a>. Do not submit passwords, authentication credentials, financial account credentials, Aadhaar/PAN copies or confidential client records through this public form.</p>
+        <p class="form-note">Your enquiry is sent securely to ScaleSafe and stored encrypted on Microsoft Azure in India. You can also write to <a href="mailto:hello@scalesafe.co.in">hello@scalesafe.co.in</a>. Do not submit passwords, authentication credentials, financial account credentials, Aadhaar/PAN copies or confidential client records through this public form.</p>
       </form>
     </div>
   </section>
 </section>
-<script id="scalesafe-contact-enhancement">
-(function(){
-  const email=document.getElementById('cEmail');
-  const reply=document.getElementById('replyToField');
-  if(email && reply){ email.addEventListener('input',function(){ reply.value=email.value; }); }
-})();
-</script>
-
-    </div>
+</div>
   </section>
 </section>
 
@@ -1509,7 +1491,8 @@ main:focus{outline:none}
   </div>
   <section class="section white">
     <div class="wrap" style="max-width:720px">
-      <form class="form" id="rightsForm">
+      <form class="form" id="rightsForm" data-endpoint="https://api.scalesafe.co.in/partners/api/v1/public/privacy-requests">
+<div class="ss-hp" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden"><label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <div class="field"><label>Request type</label><select id="rType" required><option value="">Select</option><option value="access">Access / information</option><option value="correction">Correction</option><option value="erasure">Erasure</option><option value="grievance">Privacy grievance</option></select></div>
         <div class="field"><label>Name</label><input id="rName" required></div>
         <div class="field"><label>Email</label><input id="rEmail" required type="email"></div>
@@ -1819,24 +1802,12 @@ document.addEventListener('click',e=>{
   const r=e.target.closest('[data-request]');
   if(r){e.preventDefault();openRights(r.dataset.request);}
 });
-document.getElementById('contactForm')?.addEventListener('submit',(e)=>{
-  if (!window.turnstile || !turnstile.getResponse()) {
-    e.preventDefault();
-    const msg=document.getElementById('formMsg');
-    if(msg) msg.textContent='Please complete the security check before submitting.';
-  }
-});
 document.getElementById('contactForm')?.addEventListener('submit',()=>{
   const marketing=document.getElementById('marketingConsent').checked;
   const s=getPrivacyState();
   s.marketingConsent=marketing;s.timestamp=new Date().toISOString();
   s.noticeVersion='contact-v3';s.purpose='walkthrough-enquiry';
   savePrivacyState(s);
-});
-document.getElementById('rightsForm')?.addEventListener('submit',e=>{
-  e.preventDefault();
-  const id='REQ-'+Date.now().toString(36).toUpperCase();
-  document.getElementById('rightsMsg').textContent='Demo request created: '+id+'. A production system should route this to the privacy owner, verify identity where appropriate, track the statutory/operational SLA and preserve the response record.';
 });
 document.getElementById('withdrawConsent')?.addEventListener('click',()=>{
   const s=getPrivacyState();s.marketingConsent=false;s.withdrawnAt=new Date().toISOString();savePrivacyState(s);
@@ -1859,5 +1830,6 @@ renderPrivacyState();
 
 
 <script src="/assets/privacy/gpc.js" defer></script>
+<script src="/assets/site/forms-v1.js" defer></script>
 </body>
 </html>

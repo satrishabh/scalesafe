@@ -3,6 +3,12 @@
 Working copy only. The live site is unchanged.
 
 ## Applied
+- **Forms on Azure (2026-11-19, `tools/forms.py`, owner's decision: everything runs on Microsoft Azure):**
+  - Walkthrough form posted to formsubmit.co (forwarded to Gmail) behind a Cloudflare Turnstile check enforced only in the browser. It now posts to the ScaleSafe platform (`POST /partners/api/v1/public/leads`): validated, consent-checked, rate-limited per IP, stored encrypted per person, visible to ops in the admin console. Bots: hidden honeypot field.
+  - Privacy-request form only showed "Demo request created" and sent nothing. It now posts to `POST /partners/api/v1/public/privacy-requests` (platform branch feat/privacy-requests); until that is deployed, it tells the visitor to email privacy@scalesafe.co.in.
+  - Turnstile script and widget, formsubmit.co fields and their inline scripts removed; `/assets/site/forms-v1.js` added; CSP no longer allows challenges.cloudflare.com, cloudflareinsights.com or formsubmit.co.
+  - Newsletter endpoint `/clients/...` -> `/partners/...` (platform partner-model rename).
+  - Privacy Notice: Cloudflare recipient row replaced by Microsoft Azure (India, South India region); privacy requests can be made through the form. Cookie Notice: `__cf_bm`, `cf_clearance` and Turnstile rows removed; "we do not use analytics". Accessibility statement: no Turnstile. Both notices dated 19 November 2026. **Pending legal review.**
 - **Heading structure (home page):** 9 section and legal headings changed from `<h1>` to `<h2 class="h1-as-h2">`. The hero `<h1>` is kept, so the home page has one H1. Styles copied from the original H1 rules so the look is unchanged; a desktop screenshot is pixel-identical to the original.
 - **Canonical tag:** added to `accredited-investor-desk/index.html`.
 - **llms.txt:** added at the site root, listing key pages and the content policy from robots.txt.

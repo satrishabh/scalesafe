@@ -35,7 +35,7 @@ from html.parser import HTMLParser
 
 ORIGIN = "https://scalesafe.co.in"
 SECTION = "/insights/"
-DEFAULT_ENDPOINT = "https://api.scalesafe.co.in/clients/api/v1/public/subscriptions"
+DEFAULT_ENDPOINT = "https://api.scalesafe.co.in/partners/api/v1/public/subscriptions"
 REG_TYPES = ["IA", "RA", "PMS", "AIF"]
 REQUIRED = ["title", "cat", "intro", "date", "dateISO", "read", "body", "source", "sourceUrl"]
 HOME_LINK_MARKER = "<!-- insights-link -->"
