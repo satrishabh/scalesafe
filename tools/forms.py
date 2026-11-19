@@ -116,6 +116,9 @@ def notices(root, notes):
     t = _read(p)
     t = _sub(t, r"<tr>\s*<td>Cloudflare, Inc\.</td>.*?</tr>", AZURE_ROW,
              "privacy notice: Cloudflare replaced by Microsoft Azure (India)", notes, done_marker="Azure South India region")
+    # Form notifications never went through Zoho (formsubmit.co -> Gmail, now the platform); owner removed the row.
+    t = _sub(t, r"<tr>\s*<td>Zoho Corporation Private Limited[^<]*</td>.*?</tr>\s*", "",
+             "privacy notice: Zoho row removed", notes, done_marker="Azure South India region")
     t = _sub(t, r"<td>You, by email to our Grievance Officer</td>",
              "<td>You, through the privacy request form on the Website or by email to our Grievance Officer</td>",
              "privacy notice: privacy requests through the form", notes, done_marker="through the privacy request form")
